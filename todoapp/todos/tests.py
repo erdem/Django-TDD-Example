@@ -32,7 +32,7 @@ class TodoListCreateAPIViewTestCase(APITestCase):
         """
         Todo.objects.create(user=self.user, name="Clean the car!")
         response = self.client.get(self.url)
-        self.assertTrue(len(json.loads(response.content)) == Todo.objects.count())
+        self.assertTrue(len(json.loads(response.content.decode('utf-8'))) == Todo.objects.count())
 
 
 class TodoDetailAPIViewTestCase(APITestCase):
@@ -58,7 +58,7 @@ class TodoDetailAPIViewTestCase(APITestCase):
         self.assertEqual(200, response.status_code)
 
         todo_serializer_data = TodoSerializer(instance=self.todo).data
-        response_data = json.loads(response.content)
+        response_data = json.loads(response.content.decode('utf-8'))
         self.assertEqual(todo_serializer_data, response_data)
 
     def test_todo_object_update_authorization(self):
@@ -79,13 +79,13 @@ class TodoDetailAPIViewTestCase(APITestCase):
 
     def test_todo_object_update(self):
         response = self.client.put(self.url, {"name": "Call Dad!"})
-        response_data = json.loads(response.content)
+        response_data = json.loads(response.content.decode('utf-8'))
         todo = Todo.objects.get(id=self.todo.id)
         self.assertEqual(response_data.get("name"), todo.name)
 
     def test_todo_object_partial_update(self):
         response = self.client.patch(self.url, {"done": True})
-        response_data = json.loads(response.content)
+        response_data = json.loads(response.content.decode('utf-8'))
         todo = Todo.objects.get(id=self.todo.id)
         self.assertEqual(response_data.get("done"), todo.done)
 

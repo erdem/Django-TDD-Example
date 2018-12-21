@@ -35,7 +35,7 @@ class UserRegistrationAPIViewTestCase(APITestCase):
         }
         response = self.client.post(self.url, user_data)
         self.assertEqual(201, response.status_code)
-        self.assertTrue("token" in json.loads(response.content))
+        self.assertTrue("token" in json.loads(response.content.decode('utf-8')))
 
     def test_unique_username_validation(self):
         """
@@ -80,7 +80,7 @@ class UserLoginAPIViewTestCase(APITestCase):
     def test_authentication_with_valid_data(self):
         response = self.client.post(self.url, {"username": self.username, "password": self.password})
         self.assertEqual(200, response.status_code)
-        self.assertTrue("auth_token" in json.loads(response.content))
+        self.assertTrue("auth_token" in json.loads(response.content.decode('utf-8')))
 
 
 class UserTokenAPIViewTestCase(APITestCase):
