@@ -14,13 +14,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ("id", "username", "email", "password", "confirm_password", "date_joined")
 
-    def create(self, validated_data):
-        del validated_data["confirm_password"]
-        return super(UserRegistrationSerializer, self).create(validated_data)
-
     def validate(self, attrs):
         if attrs.get('password') != attrs.get('confirm_password'):
             raise serializers.ValidationError("Those passwords don't match.")
+        del attrs['confirm_password']
         return attrs
 
 
